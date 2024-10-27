@@ -1,0 +1,19 @@
+﻿version: '3.4'
+
+services:
+  catalogdb:
+    image: postgres:15.5
+    container_name: catalogdb
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_DB: catalogdb
+    ports:
+        - "5432:5432"
+    volumes:
+      - postgres_catalog:/var/lib/postgresql/data
+
+volumes:
+  postgres_catalog:    
+
