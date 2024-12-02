@@ -11,6 +11,19 @@ public sealed record CreateProductCommand: ICommand<CreateProductResult>
 
 public sealed record CreateProductResult(Guid Id);
 
+
+public class CreateProductCommandValidatior:AbstractValidator<CreateProductCommand>
+{
+    public CreateProductCommandValidatior()
+    {
+        RuleFor(x => x.Name).NotEmpty().WithMessage("Name is required");
+        RuleFor(x => x.Description).NotEmpty().WithMessage("Description is required");
+        RuleFor(x => x.Category).NotEmpty().WithMessage("Category is required");
+        RuleFor(x=>x.ImageFile).NotEmpty().WithMessage("ImageFile is required");
+        RuleFor(x => x.Price).GreaterThan(0).WithMessage("Price must be greater than 0");
+    }
+}
+
 internal class CreateProductHandler(IDocumentSession session): ICommandHandler<CreateProductCommand, CreateProductResult>
 {
     public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
