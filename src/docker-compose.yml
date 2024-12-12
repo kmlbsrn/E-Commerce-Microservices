@@ -1,6 +1,4 @@
-﻿version: '3.4'
-
-name: Catalog.API
+﻿
 
 services:
   catalogdb:
@@ -9,12 +7,34 @@ services:
     restart: on-failure
     environment:
       POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
       POSTGRES_HOST_AUTH_METHOD: trust
       POSTGRES_DB: CatalogDb
     ports:
       - "5432:5432"
     volumes:
       - postgres_catalog:/var/lib/postgresql/data
+  
+  basketdb:
+    image: postgres:15.5
+    container_name: BasketDb
+    restart: on-failure
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_DB: BasketDb
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_basket:/var/lib/postgresql/data
+  
+  distributedcache:
+    image: redis
+    container_name: distributedcache
+    restart: on-failure
+    ports:
+      - "6379:6379"
   
   catalog_api:
     image: ${DOCKER_REGISTRY-}catalog_api
@@ -36,6 +56,30 @@ services:
     volumes:
       - ~/.microsoft/usersecrets:/home/app/.microsoft/usersecrets:ro
       - ~/.aspnet/https:/https:ro
+  
+  basket_api:
+    image: ${DOCKER_REGISTRY-}basket_api
+    build:
+      context: .
+      dockerfile: Services/Basket/Basket.API/Dockerfile
+    environment:
+      - AspNetCore__Environment=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__DefaultConnection=Host=basketdb;Port=5432;Database=BasketDb;User Id=postgres;Password=postgres;Include Error Detail=true
+      - ConnectionStrings__Redis=distributedcache:6379
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=0099
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    depends_on:
+      - basketdb
+      - distributedcache
+    ports:
+      - "6001:8080"
+      - "6061:8081"
+    volumes:
+      - ~/.microsoft/usersecrets:/home/app/.microsoft/usersecrets:ro
+      - ~/.aspnet/https:/https:ro
 
 volumes:
-  postgres_catalog:    
+  postgres_catalog:
+  postgres_basket:
