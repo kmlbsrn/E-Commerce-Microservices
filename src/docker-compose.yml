@@ -70,7 +70,7 @@ services:
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
       - ConnectionStrings__Database=Server=CatalogDb;Port=5432;Database=CatalogDb;User Id=postgres;Password=postgres;Include Error Detail=true
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=0099
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${CERT_PASSWORD}
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     depends_on:
       - catalogdb
@@ -96,7 +96,7 @@ services:
       - MessageBroker__Host=amqp://ecommerce-mq:5672
       - MessageBroker__UserName=guest
       - MessageBroker__Password=guest
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=0099
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${CERT_PASSWORD}
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     depends_on:
       - basketdb
@@ -120,7 +120,7 @@ services:
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
       - ConnectionStrings__Database=Data Source=discountdb
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=0099
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${CERT_PASSWORD}
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     ports:
       - "6002:8080"
@@ -143,7 +143,7 @@ services:
       - MessageBroker__UserName=guest
       - MessageBroker__Password=guest
       - FeatureManagement__OrderFullfilment=false
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=0099
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${CERT_PASSWORD}
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     depends_on:
       - orderdb
@@ -164,7 +164,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
-      - ASPNETCORE_Kestrel__Certificates__Default__Password=0099
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=${CERT_PASSWORD}
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
     depends_on:
       - catalog_api
