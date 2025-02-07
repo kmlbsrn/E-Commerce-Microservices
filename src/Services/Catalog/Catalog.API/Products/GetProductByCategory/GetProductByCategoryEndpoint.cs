@@ -1,4 +1,4 @@
-namespace Catalog.API.Products.GetProductByCategoryHandler;
+namespace Catalog.API.Products.GetProductByCategory;
 
 public sealed record GetProductByCategoryResponse(IEnumerable<Product> Products);
 
