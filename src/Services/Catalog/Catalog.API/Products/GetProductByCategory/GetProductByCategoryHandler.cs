@@ -1,4 +1,4 @@
-namespace Catalog.API.Products.GetProductByCategoryHandler;
+namespace Catalog.API.Products.GetProductByCategory;
 
 public sealed record GetProductByCategoryQuery(string Category) : IQuery<GetProductByCategoryResult>;
 
